@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs"); 
 const asyncHandler = require("express-async-handler"); 
 const User = require("../models/userModel"); 
 
@@ -80,8 +81,11 @@ const updateUser = asyncHandler(async(req, res) => {
         throw new Error('User not found'); 
     };
 
-    // UPDATE ONLY USERNAME/EMAIL
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    // any change is allowed
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, { $set: req.body}, { new: true }); 
+    // re-hash user password and save to database 
+    updatedUser.password = await bcrypt.hash(updatedUser.password, 10); 
+    updatedUser.save(); 
     res.status(200).json(updatedUser); 
 });
 
