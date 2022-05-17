@@ -11,7 +11,7 @@ const getAllProducts = asyncHandler(async(req, res) => {
 
     let products; 
     if(query) {
-        products = await Product.find().sort({ createAt: -1}).limit(5) 
+        products = await Product.find().sort({ createdAt: -1 }).limit(999); 
     } else if(category) {
         products = await Product.find({ categories: {
             $in: [category], 
@@ -24,7 +24,7 @@ const getAllProducts = asyncHandler(async(req, res) => {
         res.status(400); 
         throw new Error('Products not found'); 
     }
-    res.status(200).json({ products }); 
+    res.status(200).json(products); 
 });
 
 // description: Get Product
