@@ -1,5 +1,5 @@
 import styled from "styled-components"; 
-import { Facebook, Instagram, Pinterest, Twitter, MyLocationOutlined, LocalPhoneOutlined, AlternateEmailOutlined, PaymentOutlined } from "@material-ui/icons";
+import { Facebook, Instagram, Pinterest, Twitter, MyLocationOutlined, LocalPhoneOutlined, AlternateEmailOutlined, PaymentOutlined } from "@mui/icons-material";
 
 const Container = styled.div`
     display: flex; 

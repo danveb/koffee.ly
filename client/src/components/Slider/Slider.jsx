@@ -1,6 +1,6 @@
 import { useState } from "react"; 
 import styled from "styled-components"
-import { ArrowBackIosOutlined, ArrowForwardIosOutlined } from "@material-ui/icons"
+import { ArrowBackIosOutlined, ArrowForwardIosOutlined } from "@mui/icons-material"
 import { sliderItems } from "../../constants/data"; 
 
 const Container = styled.div`

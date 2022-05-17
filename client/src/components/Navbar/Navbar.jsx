@@ -1,8 +1,9 @@
 import styled from "styled-components"; 
-import { Badge } from "@material-ui/core"; 
-import { Search, ShoppingCartOutlined } from "@material-ui/icons"; 
-import { mobile, tablet } from "../../constants/responsive"; 
+import { Badge } from "@mui/material"; 
+import { Search, ShoppingCartOutlined } from "@mui/icons-material"; 
+import { Link } from "react-router-dom"; 
 
+// import { mobile, tablet } from "../../constants/responsive"; 
 // media query for mobile devices 
 // option #1: use $mobile({ backgroundColor: "red"})
 // option #2: use @media only screen and (max-width: 480px) 
@@ -61,6 +62,11 @@ const Center = styled.div`
 const Logo = styled.h1`
     font-weight: bold; 
 
+    a {
+        color: inherit; 
+        text-decoration: none; 
+    }
+
     @media screen and (max-width: 480px) {
         font-size: 24px;    
         padding: 0px 20px; 
@@ -84,6 +90,11 @@ const MenuItem = styled.div`
     cursor: pointer; 
     margin-right: 20px; 
     
+    a {
+        color: inherit; 
+        text-decoration: none; 
+    }
+    
     @media screen and (max-width: 480px) {
         font-size: 12px; 
         margin-left: 10px;     
@@ -101,10 +112,18 @@ const Navbar = () => {
                         <Search style={{ color: "gray", fontSize: "16px" }}/>
                     </SearchContainer>
                 </Left>
-                <Center><Logo>KOFFEE.LY</Logo></Center>
+                <Center>
+                    <Logo>
+                        <Link to="/">KOFFEE.LY</Link>
+                    </Logo>
+                </Center>
                 <Right>
-                    <MenuItem>REGISTER</MenuItem>
-                    <MenuItem>SIGN IN</MenuItem>
+                    <MenuItem>
+                        <Link to="/register">REGISTER</Link>
+                    </MenuItem>
+                    <MenuItem>
+                        <Link to="login">SIGN IN</Link>
+                    </MenuItem>
                     <MenuItem>
                         <Badge badgeContent={4} color="primary">
                             <ShoppingCartOutlined />

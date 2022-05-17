@@ -1,5 +1,5 @@
 import styled from "styled-components"; 
-import { SendSharp } from "@material-ui/icons";
+import { SendSharp } from "@mui/icons-material";
 
 const Container = styled.div`
     height: 60vh; 

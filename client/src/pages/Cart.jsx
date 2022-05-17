@@ -1,7 +1,7 @@
 import { Navbar, Announcement, Footer } from "../components/index"; 
 import styled from "styled-components";
 import coffee from "../assets/macchiato1.png"; 
-import { Add, Remove } from "@material-ui/icons";
+import { Add, Remove } from "@mui/icons-material";
 
 const Container = styled.div``
 const Wrapper = styled.div`
