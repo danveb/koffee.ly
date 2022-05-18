@@ -1,7 +1,9 @@
 import { Announcement, Footer, Navbar, Newsletter } from "../components/index"; 
 import styled from "styled-components"; 
-import coffee8 from "../assets/coffee10.png"; 
-import { Add, Remove } from "@material-ui/icons";
+import { Add, Remove } from "@mui/icons-material";
+import { useState, useEffect } from "react"; 
+import { useLocation } from "react-router-dom";
+import { publicRequest } from "../constants/requests";
 
 const Container = styled.div`
 `
@@ -23,7 +25,7 @@ const ImgContainer = styled.div`
 
 const Image = styled.img`
     width: 100%; 
-    height: 90vh; 
+    height: 40vh; 
     object-fit: cover; 
 
     @media screen and (max-width: 480px) {
@@ -119,35 +121,57 @@ const Button = styled.button`
 `
 
 const Product = () => {
+    const location = useLocation(); 
+    const productId = location.pathname.split("/")[2]; 
+
+    const [product, setProduct] = useState({}); 
+    const [quantity, setQuantity] = useState(1); 
+
+    useEffect(() => {
+        const getProduct = async () => {
+            try {
+                const response = await publicRequest.get(`/products/find/${productId}`); 
+                setProduct(response.data); 
+            } catch(error) {
+                console.log(error); 
+            }
+        }; 
+        getProduct(); 
+    }, [productId]); 
+
+    const handleQuantity = (type) => {
+        if(type === "decrease") {
+            quantity > 1 && setQuantity(quantity-1);
+        } else {
+            setQuantity(quantity+1);
+        };
+    }; 
+
     return (
         <Container>
             <Navbar />
             <Announcement />
             <Wrapper>
                 <ImgContainer>
-                    <Image src={coffee8} alt="coffee" />
+                    <Image src={product.img} alt="coffee" />
                 </ImgContainer>
                 <InfoContainer>
-                    <Title>Cortado Macchiato</Title>
-                    <Description>Cortado Argentino</Description>
-                    <Price>$7</Price>
+                    <Title>{product.title}</Title>
+                    <Description>{product.description}</Description>
+                    <Price>${product.price}</Price>
                     <FilterContainer>
                         <Filter>
                             <FilterTitle>Size</FilterTitle>
                             <FilterSize>
-                                <FilterSizeOption defaultChecked>One Size</FilterSizeOption>
-                                {/* <FilterSizeOption>XS</FilterSizeOption>
-                                <FilterSizeOption>S</FilterSizeOption>
-                                <FilterSizeOption>M</FilterSizeOption> */}
+                            <FilterSizeOption key={product._id}>{product.size}</FilterSizeOption>
                             </FilterSize>
                         </Filter>
                     </FilterContainer>
                     <AddContainer>
-
                         <AmountContainer>
-                            <Remove />
-                            <Amount>1</Amount>
-                            <Add />
+                            <Remove onClick={() => handleQuantity("decrease")} />
+                            <Amount>{quantity}</Amount>
+                            <Add onClick={() => handleQuantity("increase")} />
                         </AmountContainer>
                         <Button>Add To Cart</Button>
                     </AddContainer>
