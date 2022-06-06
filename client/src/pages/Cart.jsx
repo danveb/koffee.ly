@@ -1,7 +1,13 @@
 import { Navbar, Announcement, Footer } from "../components/index"; 
 import styled from "styled-components";
-import coffee from "../assets/macchiato1.png"; 
 import { Add, Remove } from "@mui/icons-material";
+import { useSelector } from "react-redux"; 
+import { useNavigate } from "react-router-dom"; 
+import StripeCheckout from "react-stripe-checkout"; 
+import { useEffect, useState } from "react";
+import { userRequest } from "../constants/requests";
+
+const KEY = process.env.REACT_APP_STRIPE; 
 
 const Container = styled.div``
 const Wrapper = styled.div`
@@ -145,6 +151,32 @@ const Button = styled.button`
 `
 
 const Cart = () => {
+    const cart = useSelector(state => state.cart); 
+
+    const [stripeToken, setStripeToken] = useState(null); 
+
+    const navigate = useNavigate(); 
+
+    const onToken = (token) => {
+        setStripeToken(token); 
+    }; 
+
+    useEffect(() => {
+        const makeRequest = async () => {
+            try {
+                const response = await userRequest.post("/checkout/payment", {
+                    tokenId: stripeToken.id, 
+                    amount: cart.total*100, 
+                }); 
+                console.log(response); 
+                navigate("/success", {data:response.data}); 
+            } catch(error) {
+                console.log(error); 
+            };
+        }; 
+        stripeToken && makeRequest(); 
+    }, [stripeToken, cart.total, navigate]); 
+
     return (
         <Container>
             <Navbar />
@@ -154,70 +186,66 @@ const Cart = () => {
                 <Top>
                     <TopButton>CONTINUE SHOPPING</TopButton>
                     <TopTexts>
-                        <TopText>Shopping Bag(2)</TopText>
+                        <TopText>Shopping Bag({cart.quantity})</TopText>
                         <TopText>Your Wishlist(0)</TopText>
                     </TopTexts>
-                    <TopButton type="filled">CHECKOUT</TopButton>
+                    {/* <TopButton type="filled">CHECKOUT</TopButton> */}
                 </Top>
                 <Bottom>
                     <Info>
-                        <Product>
+                        {cart.products.map((product) => (
+                            <Product>
                             <ProductDetail>
-                                <Image src={coffee} alt="coffee" />
+                                <Image src={product.img} alt={product.categories[0]} />
                                 <Details>
-                                    <ProductName><b>Product: </b>Espresso Macchiato</ProductName>
-                                    <ProductId><b>ID: </b>912383</ProductId>
-                                    <ProductSize><b>Size: </b>One Size</ProductSize>
+                                    <ProductName><b>Product: </b>{product.title}</ProductName>
+                                    <ProductId><b>ID: </b>{product._id}</ProductId>
+                                    <ProductSize><b>Size: </b>{product.size}</ProductSize>
                                 </Details>
                             </ProductDetail>
                             <PriceDetail>
                                 <ProductAmountContainer>
                                     <Add />
-                                        <ProductAmount>2</ProductAmount>
+                                        <ProductAmount>{product.quantity}</ProductAmount>
                                     <Remove />
                                 </ProductAmountContainer>
-                                <ProductPrice>$12</ProductPrice>
+                                <ProductPrice>$ {(product.price * product.quantity).toFixed(2)}</ProductPrice>
                             </PriceDetail>
                         </Product>
+                        ))}
                         <Hr />
-                        <Product>
-                            <ProductDetail>
-                                <Image src={coffee} alt="coffee" />
-                                <Details>
-                                    <ProductName><b>Product: </b>Espresso Macchiato</ProductName>
-                                    <ProductId><b>ID: </b>912383</ProductId>
-                                    <ProductSize><b>Size: </b>One Size</ProductSize>
-                                </Details>
-                            </ProductDetail>
-                            <PriceDetail>
-                                <ProductAmountContainer>
-                                    <Add />
-                                        <ProductAmount>2</ProductAmount>
-                                    <Remove />
-                                </ProductAmountContainer>
-                                <ProductPrice>$12</ProductPrice>
-                            </PriceDetail>
-                        </Product>
                     </Info>
                     <Summary>
                         <SummaryTitle>Order Summary</SummaryTitle>
                         <SummaryItem>
                             <SummaryItemText>Subtotal</SummaryItemText>
-                            <SummaryItemPrice>$24</SummaryItemPrice>
+                            <SummaryItemPrice>$ {cart.total.toFixed(2)}</SummaryItemPrice>
                         </SummaryItem>
                         <SummaryItem>
                             <SummaryItemText>Estimated Shipping</SummaryItemText>
-                            <SummaryItemPrice>$0.00</SummaryItemPrice>
+                            <SummaryItemPrice>$ 9.99</SummaryItemPrice>
                         </SummaryItem>
                         <SummaryItem>
-                            <SummaryItemText>Employee Discount</SummaryItemText>
-                            <SummaryItemPrice>-$2.40</SummaryItemPrice>
+                            <SummaryItemText>Shipping Discount</SummaryItemText>
+                            <SummaryItemPrice>-$ 9.99</SummaryItemPrice>
                         </SummaryItem>
                         <SummaryItem type="total">
                             <SummaryItemText>Total</SummaryItemText>
-                            <SummaryItemPrice>$21.60</SummaryItemPrice>
+                            <SummaryItemPrice>$ {cart.total.toFixed(2)}</SummaryItemPrice>
                         </SummaryItem>
-                        <Button>Checkout</Button>
+                        {/* Stripe Checkout component */}
+                        <StripeCheckout
+                            name="Koffee.ly"
+                            image=""
+                            billingAddress
+                            shippingAddress
+                            description={`Your total is $${cart.total.toFixed(2)}`}
+                            amount={cart.total*100}
+                            token={onToken}
+                            stripeKey={KEY}
+                        >
+                            <Button>Checkout</Button>
+                        </StripeCheckout>
                     </Summary>
                 </Bottom>
             </Wrapper>

@@ -23,6 +23,7 @@ app.use('/api/users', require("./routes/users"));
 app.use('/api/products', require("./routes/product"));
 app.use('/api/carts', require("./routes/cart"));
 app.use('/api/orders', require("./routes/order"));
+app.use('/api/checkout', require("./routes/stripe")); 
 
 // Error Handler 
 app.use(errorHandler); 

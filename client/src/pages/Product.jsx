@@ -4,6 +4,8 @@ import { Add, Remove } from "@mui/icons-material";
 import { useState, useEffect } from "react"; 
 import { useLocation } from "react-router-dom";
 import { publicRequest } from "../constants/requests";
+import { addProduct } from "../redux/cartSlice";
+import { useDispatch } from "react-redux"; 
 
 const Container = styled.div`
 `
@@ -127,6 +129,8 @@ const Product = () => {
     const [product, setProduct] = useState({}); 
     const [quantity, setQuantity] = useState(1); 
 
+    const dispatch = useDispatch(); 
+
     useEffect(() => {
         const getProduct = async () => {
             try {
@@ -146,6 +150,11 @@ const Product = () => {
             setQuantity(quantity+1);
         };
     }; 
+
+    const handleClick = () => {
+        // dispatch addProduct 
+        dispatch(addProduct({ ...product, quantity })); 
+    }
 
     return (
         <Container>
@@ -173,7 +182,7 @@ const Product = () => {
                             <Amount>{quantity}</Amount>
                             <Add onClick={() => handleQuantity("increase")} />
                         </AmountContainer>
-                        <Button>Add To Cart</Button>
+                        <Button onClick={handleClick}>Add To Cart</Button>
                     </AddContainer>
                 </InfoContainer>
             </Wrapper>
