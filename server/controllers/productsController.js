@@ -1,25 +1,10 @@
-const asyncHandler = require("express-async-handler"); 
-const Product = require("../models/productModel"); 
+import asyncHandler from "express-async-handler"; 
+import Product from "../models/productModel.js";
 
-// description: Get Product
-// route: GET /api/products/find/:id
-// access: ALL 
-// query: new, categories
+// @description: Get Product
+// @route: GET /api/products
 const getAllProducts = asyncHandler(async(req, res) => {
-    const query = req.query.new;
-    const category = req.query.category; 
-
-    let products; 
-    if(query) {
-        products = await Product.find().sort({ createdAt: -1 }).limit(999); 
-    } else if(category) {
-        products = await Product.find({ categories: {
-            $in: [category], 
-        }})
-    } else {
-        products = await Product.find()
-    }
-
+    const products = await Product.find({}); 
     if(!products) {
         res.status(400); 
         throw new Error('Products not found'); 
@@ -27,22 +12,19 @@ const getAllProducts = asyncHandler(async(req, res) => {
     res.status(200).json(products); 
 });
 
-// description: Get Product
-// route: GET /api/products/find/:id
-// access: ALL 
+// @description: Get Product
+// @route: GET /api/products/:id
 const getProduct = asyncHandler(async(req, res) => {
     const product = await Product.findById(req.params.id)
     if(!product) {
         res.status(400); 
         throw new Error('Product not found'); 
     }
-    await Product.findById(req.params.id)
     res.status(200).json(product); 
 });
 
-// description: Create Product
-// route: POST /api/products
-// access: privateAdmin
+// @description: Create Product
+// @route: POST /api/products
 const createProduct = asyncHandler(async(req, res) => {
     const { title, description, img, categories, size, color, price } = req.body; 
     const product = await Product.create({
@@ -74,9 +56,8 @@ const createProduct = asyncHandler(async(req, res) => {
     }
 }); 
 
-// description: Update Product 
-// route: PUT /api/products/:id 
-// access: privateAdmin 
+// @description: Update Product 
+// @route: PUT /api/products/:id 
 const updateProduct = asyncHandler(async(req, res) => {
     const product = await Product.findById(req.params.id)
     if(!product) {
@@ -88,9 +69,8 @@ const updateProduct = asyncHandler(async(req, res) => {
     res.status(200).json(updatedProduct); 
 }); 
 
-// description: Delete Product
-// route: DELETE /api/products/:id 
-// access: privateAdmin 
+// @description: Delete Product
+// @route: DELETE /api/products/:id 
 const deleteProduct = asyncHandler(async(req, res) => {
     const product = await Product.findById(req.params.id)
     if(!product) {
@@ -101,10 +81,10 @@ const deleteProduct = asyncHandler(async(req, res) => {
     res.status(200).json({ id: req.params.id }); 
 })
 
-module.exports = {
+export {
     getAllProducts, 
     getProduct, 
     createProduct, 
     updateProduct, 
-    deleteProduct,
+    deleteProduct, 
 }

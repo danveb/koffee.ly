@@ -1,10 +1,12 @@
-const express = require('express'); 
-const colors = require('colors'); 
-const dotenv = require('dotenv').config(); 
-const connectDB = require('./config/db'); 
-const port = process.env.PORT || 4000; 
-const cors = require('cors'); 
-const { errorHandler } = require('./middleware/errorMiddleware'); 
+import express from "express"; 
+import colors from "colors"; 
+import dotenv from "dotenv/config"; 
+import connectDB from "./config/db.js"; 
+import productsRoute from "./routes/productsRoute.js"; 
+import usersRoute from "./routes/usersRoute.js"; 
+import errorHandler from "./middleware/errorMiddleware.js"; 
+import cors from "cors"; 
+const port = process.env.PORT || 8801; 
 
 connectDB() 
 
@@ -18,12 +20,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors()); 
 
 // Routes 
-app.use('/api/auth', require("./routes/auth"));
-app.use('/api/users', require("./routes/users"));
-app.use('/api/products', require("./routes/product"));
-app.use('/api/carts', require("./routes/cart"));
-app.use('/api/orders', require("./routes/order"));
-app.use('/api/checkout', require("./routes/stripe")); 
+app.use("/api/products", productsRoute);
+app.use("/api/users", usersRoute); 
 
 // Error Handler 
 app.use(errorHandler); 
