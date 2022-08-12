@@ -1,14 +1,14 @@
-import { Announcement, Navbar, Slider, Categories, Products, Newsletter, Footer } from "../components/index"; 
-
-const Home = () => {
+import Hero from "../components/Hero/Hero"; 
+import { Announcement, Navbar, Menu, Slider, ProductList, Footer } from "../components/index"; 
+const Home = ({ menuOpen, setMenuOpen }) => {
     return (
         <div>
             <Announcement />
-            <Navbar />
+            <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+            <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
             <Slider />
-            <Categories />
-            <Products />
-            <Newsletter />
+            <Hero />
+            <ProductList />
             <Footer />
         </div>
             
