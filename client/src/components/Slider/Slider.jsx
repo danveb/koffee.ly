@@ -1,16 +1,17 @@
 import { useState } from "react"; 
-import styled from "styled-components"
-import { ArrowBackIosOutlined, ArrowForwardIosOutlined } from "@mui/icons-material"
-import { sliderItems } from "../../constants/data"; 
+import { ArrowBackIosOutlined, ArrowForwardIosOutlined } from "@mui/icons-material"; 
+import { sliderItems } from "../../constants/slider"; 
+import styled from "styled-components"; 
+import { device } from "../../styled";
 
 const Container = styled.div`
     width: 100%; 
-    height: 100vh; 
+    height: 100%; 
     display: flex; 
     position: relative; 
     overflow: hidden; 
 
-    @media screen and (max-width: 480px) {
+    @media ${device.mobileM} {
         display: none;    
     }
 `
@@ -43,22 +44,29 @@ const Wrapper = styled.div`
 
 const Slide = styled.div`
     width: 100vw; 
-    height: 100vh; 
+    height: 50vh; 
     display: flex; 
     align-items: center; 
     background-color: #${props=>props.bg}; 
 `
 const ImgContainer = styled.div`
     flex: 1; 
+    width: 100%; 
     height: 100%; 
 `
 
 const Image = styled.img`
     height: 100%; 
+    width: 50vw; 
+    object-fit: cover; 
 `
 const InfoContainer = styled.div`
     flex: 1; 
-    padding: 50px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: flex-start; 
+    flex-direction: column; 
+    margin-left: 25px; 
 `
 
 const Title = styled.h1`
@@ -96,16 +104,16 @@ const Slider = () => {
             </Arrow>
             <Wrapper slideIndex={slideIndex}>
                 {sliderItems.map((item) => (
-                <Slide key={item.id} bg={item.bg}>
-                    <ImgContainer>
-                        <Image src={item.img} alt="img" />
-                    </ImgContainer>
-                    <InfoContainer>
-                        <Title>{item.title}</Title>
-                        <Desc>{item.desc}</Desc>
-                        <Button>BROWSE NOW</Button>
-                    </InfoContainer>
-                </Slide>
+                    <Slide key={item.id} bg={item.bg}>
+                        <ImgContainer>
+                            <Image src={item.img} alt="img" />
+                        </ImgContainer>
+                        <InfoContainer>
+                            <Title>{item.title}</Title>
+                            <Desc>{item.desc}</Desc>
+                            <Button>SHOP NOW</Button>
+                        </InfoContainer>
+                    </Slide>
                 ))}
             </Wrapper>
             <Arrow direction="right" onClick={()=> handleClick("right")}>
