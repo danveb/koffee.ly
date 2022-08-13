@@ -1,4 +1,4 @@
-import { useEffect } from "react"; 
+import { useState, useEffect } from "react"; 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"; 
 import { getProductDetail } from "../../redux/product/productSlice";
@@ -89,6 +89,59 @@ const PPrice = styled.p`
     margin-bottom: 20px; 
 `
 
+const QtyContainer = styled.div`
+    width: 50%; 
+    margin: 30px 0px; 
+    display: flex; 
+    justify-content: space-between; 
+
+    @media screen and (max-width: 480px) {
+        width: 100%;    
+    }
+`
+const Qty = styled.div`
+    display: flex; 
+    align-items: center; 
+`
+const QtyTitle = styled.span`
+    font-size: 20px;
+    font-weight: 200; 
+`
+const QtySize = styled.select`
+    margin-left: 20px; 
+    padding: 5px; 
+`
+const QtyOption = styled.option`
+`
+
+const AddContainer = styled.div`
+    width: 50%; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+
+    @media screen and (max-width: 480px) {
+        width: 100%;    
+    }
+`
+
+const AmountContainer = styled.div`
+    display: flex; 
+    align-items: center; 
+    font-weight: 700; 
+`
+
+const Amount = styled.span`
+    width: 30px; 
+    height: 30px; 
+    border-radius: 10px; 
+    border: 1px solid teal; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    margin: 0px 5px; 
+`
+
 const Button = styled.button`
     padding: 15px 25px; 
     border: 2px solid teal; 
@@ -102,9 +155,19 @@ const Button = styled.button`
         color: #fff; 
         border: 2px solid #000; 
     }
+
+    &.off {
+        background-color: darkgray; 
+        border: none; 
+        color: #fff; 
+        cursor: initial; 
+    }
 `
 
 const ProductItem = ({ menuOpen, setMenuOpen }) => {
+    // useState
+    const [qty, setQty] = useState(1); 
+
     // useNavigate
     const navigate = useNavigate(); 
 
@@ -140,6 +203,11 @@ const ProductItem = ({ menuOpen, setMenuOpen }) => {
         return <Spinner />
     };
 
+    // handleClick
+    const handleClick = () => {
+        navigate(`/cart/${productId}?qty=${qty}`); 
+    };
+
     return (
         <>        
             <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
@@ -164,7 +232,35 @@ const ProductItem = ({ menuOpen, setMenuOpen }) => {
                             <H5Price>Price</H5Price>
                             <PPrice>${product.price}</PPrice>
                         </Price>
-                        <Button>Add To Cart</Button>
+                        {product.countInStock > 0 ? (
+                            <>
+                            <QtyContainer>
+                                <Qty>
+                                    <QtyTitle>Quantity</QtyTitle>
+                                    <QtySize 
+                                        value={qty} 
+                                        onChange={(e) => setQty(e.target.value)}
+                                    >
+                                        {
+                                            [...Array(product.countInStock).keys()].map((x) => (
+                                                <QtyOption 
+                                                    key={x + 1} 
+                                                    value={x + 1}
+                                                >
+                                                    {x + 1}
+                                                </QtyOption>
+                                            ))
+                                        }   
+                                    </QtySize>
+                                </Qty>
+                            </QtyContainer>
+                            <Button
+                                onClick={handleClick}
+                            >Add To Cart</Button>
+                            </>
+                        ) : (
+                            <Button className="off" disabled={product.countInStock === 0}>Out of Stock</Button>
+                        )}
                     </InfoContainer>
                 </Container>
             <Footer />

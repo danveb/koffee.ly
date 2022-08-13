@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from "react-redux"; 
-import { logout, reset } from "../../redux/auth/authSlice"; 
+import { logout } from "../../redux/auth/authSlice"; 
 import { Link, useNavigate } from "react-router-dom"; 
 import { Badge } from "@mui/material"; 
 import { Search, AccountCircle, ShoppingBasket, Logout } from "@mui/icons-material"
 import "./Navbar.scss"; 
+import { toast } from "react-toastify"; 
 
 const Navbar = ({ menuOpen, setMenuOpen }) => {
     // useDispatch 
@@ -13,17 +14,17 @@ const Navbar = ({ menuOpen, setMenuOpen }) => {
     const navigate = useNavigate(); 
 
     // user
-    const { user } = useSelector((state) => state.auth);  
+    const { user } = useSelector((state) => state.auth); 
 
-    // cart
-    // const { quantity } = useSelector((state) => state.cart); 
-    // const quantity = useSelector(state => state.cart.quantity); 
+    // cart 
+    const { cartItems } = useSelector((state) => state.cart); 
+    // get the quantity inside the basket at any time
+    const qty = cartItems.reduce((acc, item) => acc + item.qty, 0); 
 
-    // TODO: handle user logout
-    // using redux we should dispatch logout()  
-    // add toast notifications 
+    // handleLogout
     const handleLogout = () => {
         dispatch(logout()); 
+        toast.info(`Sad to see you go ${user.name} 😭`); 
         navigate("/"); 
     }; 
 
@@ -46,15 +47,14 @@ const Navbar = ({ menuOpen, setMenuOpen }) => {
                     <ul className="navbar-item">
                         <li>
                             <Link to="/cart">
-                                {/* <Badge badgeContent={quantity} color="primary"> */}
-                                <Badge badgeContent="" color="primary">
+                                <Badge badgeContent={qty} color="primary">
                                     <ShoppingBasket />
                                 </Badge>
                             </Link>
                         </li>
                         {user ? (
                             <li>
-                                <Logout onClick={() => handleLogout} />
+                                <Logout onClick={handleLogout} />
                             </li>
                         ) : (
                             <li>

@@ -8,9 +8,8 @@ const Container = styled.div`
     display: flex; 
 
     @media ${device.mobile} {
-        flex-direction: column;    
+        flex-direction: column-reverse;
     }
-
 `
 const Left = styled.div`
     flex: 1;
@@ -20,14 +19,16 @@ const Left = styled.div`
 `
 
 const Logo = styled.h1`
-
 `
+
 const Description = styled.p`
     margin: 20px 0px; 
 `
+
 const SocialContainer = styled.div`
     display: flex; 
 `
+
 const SocialIcon = styled.div`
     width: 40px; 
     height: 40px; 
@@ -75,6 +76,7 @@ const ListItem = styled.li`
         text-decoration: none;  
     }
 `
+
 const Right = styled.div`
     flex: 1;
     padding: 20px; 
@@ -99,7 +101,7 @@ const Footer = () => {
         <Container>
             <Left>
                 <Logo>KOFFEE.LY</Logo>
-                <Description>We are proud to serve the world's best coffee crafted by our baristas.</Description>
+                <Description>Proud to serve koffee.</Description>
                 <SocialContainer>
                     <SocialIcon color="000">
                         <GitHub />

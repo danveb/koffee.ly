@@ -1,17 +1,26 @@
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"; 
-import { Link } from "react-router-dom";
+import { logout } from "../../redux/auth/authSlice"; 
 import { links } from "../../constants/links"; 
 import { AccountCircle, Logout } from "@mui/icons-material";
 import "./Menu.scss"; 
+import { toast } from "react-toastify"; 
 
 const Menu = ({ menuOpen, setMenuOpen }) => {
-    const { user } = useSelector((state) => state.auth); 
-
+    // useDispatch 
     const dispatch = useDispatch(); 
+
+    // useNavigate 
+    const navigate = useNavigate(); 
+
+    // user
+    const { user } = useSelector((state) => state.auth); 
     
     // handleLogout 
     const handleLogout = () => {
-        dispatch({ type: "logout" }); 
+        dispatch(logout()); 
+        toast.info(`Sad to see you go ${user.name} 😭`); 
+        navigate("/"); 
     }; 
 
     return (
