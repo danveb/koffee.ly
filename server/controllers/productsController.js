@@ -26,14 +26,14 @@ const getProduct = asyncHandler(async(req, res) => {
 // @description: Create Product
 // @route: POST /api/products
 const createProduct = asyncHandler(async(req, res) => {
-    const { title, description, img, categories, size, color, price } = req.body; 
+    const { title, caption, about, description, img, categories, price } = req.body; 
     const product = await Product.create({
         title, 
+        caption, 
+        about,
         description, 
         img, 
         categories, 
-        size, 
-        color,
         price
     })
 
@@ -41,12 +41,11 @@ const createProduct = asyncHandler(async(req, res) => {
         res.status(201).json({
             _id: product.id, 
             title: product.title, 
+            caption: product.caption, 
+            about: product.about, 
             description: product.description, 
             img: product.img, 
             categories: product.categories, 
-            size: product.size, 
-            color: product.color, 
-            price: product.price, 
             createdAt: product.createdAt, 
             updatedAt: product.updatedAt
         })

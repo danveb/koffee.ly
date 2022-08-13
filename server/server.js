@@ -4,7 +4,7 @@ import dotenv from "dotenv/config";
 import connectDB from "./config/db.js"; 
 import productsRoute from "./routes/productsRoute.js"; 
 import usersRoute from "./routes/usersRoute.js"; 
-import errorHandler from "./middleware/errorMiddleware.js"; 
+import { notFound, errorHandler } from "./middleware/errorMiddleware.js"; 
 import cors from "cors"; 
 const port = process.env.PORT || 8801; 
 
@@ -23,7 +23,8 @@ app.use(cors());
 app.use("/api/products", productsRoute);
 app.use("/api/users", usersRoute); 
 
-// Error Handler 
-app.use(errorHandler); 
+// Error Handlers 
+app.use(notFound);  
+app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server started on port ${port}`)); 
