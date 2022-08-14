@@ -116,19 +116,26 @@ const getUserProfile = asyncHandler(async (req, res) => {
 }); 
 
 // @description: Update User 
-// @route: PUT /api/users/:id 
+// @route: PUT /api/users/profile
 const updateUser = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id); 
+    const user = await User.findById(req.user._id); 
     if(!user) {
         res.status(400); 
         throw new Error("User not found"); 
+    } else {
+        user.name = req.body.name || user.name; 
+        user.email = req.body.email || user.email; 
+        if(req.body.password) {
+            user.password = req.body.password; 
+        }; 
+
+        // update the user and include the password
+        const updatedUser = await User.findByIdAndUpdate(req.user._id, {$set: req.body}, {new: true}); 
+        // re-hash (10 rounds) user password and save to database 
+        updatedUser.password = await bcrypt.hash(updatedUser.password, 10); 
+        updatedUser.save(); 
+        res.status(200).json(updatedUser); 
     }; 
-    // update the user 
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true}); 
-    // re-hash (10 rounds) user password and save to database 
-    updatedUser.password = await bcrypt.hash(updatedUser.password, 10); 
-    updatedUser.save(); 
-    res.status(200).json(updatedUser); 
 }); 
 
 // export all 

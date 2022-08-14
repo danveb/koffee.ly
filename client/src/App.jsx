@@ -1,7 +1,7 @@
 import { useState } from "react"; 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; 
 import Home from "./pages/Home";
-import { Cart, Login, ProductItem, Register } from "./components/index"; 
+import { Cart, Login, ProductItem, Profile, Register } from "./components/index"; 
 import { ToastContainer } from "react-toastify"; 
 import "react-toastify/dist/ReactToastify.css"; 
 
@@ -14,6 +14,7 @@ const App = () => {
             <Router>
                 <Routes>
                     <Route path="/" element={<Home menuOpen={menuOpen} setMenuOpen={setMenuOpen} /> } />
+                    <Route path="/profile" element={<Profile menuOpen={menuOpen} setMenuOpen={setMenuOpen} /> } />
                     <Route path="/products/:id" element={<ProductItem menuOpen={menuOpen} setMenuOpen={setMenuOpen} /> } />
                     <Route path="/cart">
                         <Route path="" element={<Cart menuOpen={menuOpen} setMenuOpen={setMenuOpen} />} />

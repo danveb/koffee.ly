@@ -1,6 +1,6 @@
 import express from "express"; 
 const router = express.Router(); 
-import { registerUser, loginUser, getUserProfile } from "../controllers/userController.js";
+import { registerUser, loginUser, getUserProfile, updateUser } from "../controllers/userController.js";
 import { protect, protectAdmin } from "../middleware/authMiddleware.js"; 
 
 // POST /api/users
@@ -12,16 +12,16 @@ router.post("/login", loginUser);
 // GET /api/users/profile
 router.get("/profile", protect, getUserProfile); 
 
-// // GET /api/users
+// PUT /api/users/:id
+router.put("/profile", protect, updateUser); 
+
+// GET /api/users 
 // router.get("/", protectAdmin, getAllUsers); 
 
-// // GET /api/users/:id
+// GET /api/users/:id
 // router.get("/:id", protectAdmin, getUser); 
 
-// // PUT /api/users/:id
-// router.put("/:id", protect, updateUser); 
-
-// // DELETE /api/
+// DELETE /api/
 // router.delete("/:id", protectAdmin, deleteUser); 
 
 export default router

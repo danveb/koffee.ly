@@ -107,10 +107,14 @@ const Login = ({ menuOpen, setMenuOpen }) => {
     // user state
     const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth); 
 
+    // const userLogin = useSelector((state) => state.userLogin); 
+    // const { loading, error, userInfo } = userLogin; 
+
+
     // useEffect 
     useEffect(() => {
         if(isError) {
-            toast.error("Invalid username/password", {
+            toast.error(message, {
                 position: "top-center", 
                 autoClose: 2000, 
                 pauseOnHover: true, 
@@ -128,7 +132,6 @@ const Login = ({ menuOpen, setMenuOpen }) => {
         if(user) {
             navigate("/"); 
         }
-        dispatch(reset()); 
     // dependency   
     }, [user, isError, isSuccess, message, navigate, dispatch]); 
 

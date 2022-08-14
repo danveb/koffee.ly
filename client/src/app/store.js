@@ -9,6 +9,7 @@ const cartItemsFromStorage = localStorage.getItem("cartItems") ? JSON.parse(loca
 
 const initialState = {
     cart: { cartItems: cartItemsFromStorage }, 
+    // userLogin: { userInfo: userInfoFromStorage }, 
 }; 
 
 export const store = configureStore({
@@ -17,6 +18,8 @@ export const store = configureStore({
         products: productsReducer, 
         product: productReducer, 
         cart: cartReducer, 
+        // userLogin: userLoginReducer, 
+        // userDetails: userDetailsReducer, 
     },
     initialState,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger), 

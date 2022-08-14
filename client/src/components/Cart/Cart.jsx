@@ -1,6 +1,6 @@
 // import StripeCheckout from "react-stripe-checkout"; 
 import { useEffect, useState } from "react";
-import { Navbar, Menu, Announcement, Footer } from "../index"; 
+import { Navbar, Menu, Announcement } from "../index"; 
 import { useSelector, useDispatch } from "react-redux"; 
 import { useLocation, useNavigate } from "react-router-dom"; 
 import { addItemsToCart, removeFromCart } from "../../redux/cart/cartAction";
@@ -333,7 +333,6 @@ const Cart = ({ menuOpen, setMenuOpen }) => {
                 </Bottom>
                 </>)}
             </Wrapper>
-            <Footer />
         </Container>
     )
 }

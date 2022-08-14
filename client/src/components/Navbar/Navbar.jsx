@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"; 
-import { logout } from "../../redux/auth/authSlice"; 
+import { logout, reset } from "../../redux/auth/authSlice"; 
 import { Link, useNavigate } from "react-router-dom"; 
 import { Badge } from "@mui/material"; 
 import { Search, AccountCircle, ShoppingBasket, Logout } from "@mui/icons-material"
@@ -23,7 +23,9 @@ const Navbar = ({ menuOpen, setMenuOpen }) => {
 
     // handleLogout
     const handleLogout = () => {
+        setMenuOpen(!menuOpen); 
         dispatch(logout()); 
+        dispatch(reset()); 
         toast.info(`Sad to see you go ${user.name} 😭`); 
         navigate("/"); 
     }; 
@@ -40,7 +42,7 @@ const Navbar = ({ menuOpen, setMenuOpen }) => {
                 </div>
                 <div className="navbar-center">
                     <h1 className="logo">
-                        <Link to="/">KOFFEE.LY</Link>
+                        <Link to="/" onClick={() => setMenuOpen(false)}>KOFFEE.LY</Link>
                     </h1>
                 </div>
                 <div className="navbar-right">
@@ -48,7 +50,7 @@ const Navbar = ({ menuOpen, setMenuOpen }) => {
                         <li>
                             <Link to="/cart">
                                 <Badge badgeContent={qty} color="primary">
-                                    <ShoppingBasket />
+                                    <ShoppingBasket onClick={() => setMenuOpen(false)} />
                                 </Badge>
                             </Link>
                         </li>
@@ -58,7 +60,7 @@ const Navbar = ({ menuOpen, setMenuOpen }) => {
                             </li>
                         ) : (
                             <li>
-                                <Link to="/login">
+                                <Link to="/login" onClick={() => setMenuOpen(false)}>
                                     <AccountCircle />
                                 </Link>
                             </li>
